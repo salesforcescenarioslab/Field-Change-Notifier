@@ -28,8 +28,8 @@ This example shows how to display a toast notification on the **Account Record P
 4️⃣ **Add the LWC to the Account Record Page in Lightning App Builder**
 
 5️⃣ **Test:**  
-   - Open the Account page in one tab  
-   - In another tab, edit the same Account’s `SLA__c`  
+   - Open any Account record with the correct lightning recordpage  
+   - Edit the same Account’s `SLA__c`  
    - Save → See toast instantly!
 
 ---
