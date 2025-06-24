@@ -2,7 +2,9 @@
 
 ## 📄 Description
 
-This example shows how to display a toast notification on the Account Record Page when the `SLA__c` field is updated — using a Platform Event and Lightning Web Component subscriber.
+This example shows how to display a toast notification on the **Account Record Page** when the `SLA__c` field is updated — using a Platform Event and Lightning Web Component subscriber.
+
+---
 
 ## ✅ Components
 
@@ -12,16 +14,36 @@ This example shows how to display a toast notification on the Account Record Pag
 | `AccountSLAChangeTrigger` | Apex Trigger that publishes the event when `SLA__c` changes |
 | `slaChangeSubscriber` | LWC that listens for the Platform Event and shows a toast |
 
+---
+
 ## 🔑 Steps to Use
 
-1. Create the Platform Event: `FieldChangeNotification__e`  
+1️⃣ **Create the Platform Event:** `FieldChangeNotification__e`  
    - Fields: `RecordId__c` (Text), `New_SLA_Value__c` (Text)
-2. Deploy the Apex Trigger.
-3. Deploy the LWC.
-4. Add the LWC to the Account Record Page in Lightning App Builder.
-5. Open the Account page in one tab. In another tab, edit the same Account’s `SLA__c` → Save → See toast instantly!
+
+2️⃣ **Deploy the Apex Trigger**
+
+3️⃣ **Deploy the LWC**
+
+4️⃣ **Add the LWC to the Account Record Page in Lightning App Builder**
+
+5️⃣ **Test:**  
+   - Open the Account page in one tab  
+   - In another tab, edit the same Account’s `SLA__c`  
+   - Save → See toast instantly!
+
+---
 
 ## 🎉 Clean, Real-Time, Reusable!
 
-## 💡 Author
+---
+
+## 👨‍💻 Author
+
 **Deepak Ganesan | Salesforce Scenarios Lab**
+
+✉️ **Contact me:** [yourname@gmail.com](mailto:yourname@gmail.com)
+
+---
+
+## ⭐ If you find this helpful, please ⭐ star the repo and subscribe to my YouTube channel!
