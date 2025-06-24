@@ -42,7 +42,7 @@ This example shows how to display a toast notification on the **Account Record P
 
 **Deepak Ganesan | Salesforce Scenarios Lab**
 
-✉️ **Contact me:** [yourname@gmail.com](mailto:yourname@gmail.com)
+✉️ **Contact me:** [salesforce.scenarios.lab@gmail.com](mailto:salesforce.scenarios.lab@gmail.com)
 
 ---
 
