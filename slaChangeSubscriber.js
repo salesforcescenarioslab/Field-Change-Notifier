@@ -1,85 +1,71 @@
-// Import necessary modules from LWC and Lightning services
 import { LightningElement, api } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { subscribe, unsubscribe, onError } from 'lightning/empApi';
 
 export default class SlaChangeSubscriber extends LightningElement {
-    // Expose recordId to identify the current Account record
-    @api recordId;
+    @api recordId; // Parent record ID passed to the component
+    channelName = '/event/FieldChangeNotification__e'; // Platform Event channel to subscribe to
+    subscription = {}; // Holds the subscription object for EMP API
+    previousValue; // Tracks the last known SLA value for comparison
 
-    // Name of the Platform Event channel to subscribe to
-    channelName = '/event/FieldChangeNotification__e';
-
-    // Stores the subscription reference for unsubscribing later
-    subscription = {};
-
-    // Used to track the previously received value and avoid duplicate toasts
-    previousValue;
-
-    // Called when the component is inserted into the DOM
+    // Subscribe to Platform Events when component loads
     connectedCallback() {
-        this.handleSubscribe();           // Start listening for platform events
-        this.registerErrorListener();     // Register error listener
+        this.handleSubscribe();
+        this.registerErrorListener();
     }
 
-    // Called when the component is removed from the DOM
+    // Unsubscribe when component is destroyed to avoid memory leaks
     disconnectedCallback() {
-        this.handleUnsubscribe();         // Unsubscribe from the channel
+        this.handleUnsubscribe();
     }
 
-    // Subscribes to the Platform Event and handles incoming events
+    // Handles Platform Event subscription and SLA change detection
     handleSubscribe() {
-        // Callback function that gets triggered on each event
         const messageCallback = (response) => {
             const payload = response.data.payload;
 
-            // Ensure we have valid payload and recordId
+            // Check if the event payload matches the current record ID
             if (payload && payload.RecordId__c && this.recordId) {
-                // Salesforce sometimes appends suffixes — use startsWith for safe matching
                 if (payload.RecordId__c.startsWith(this.recordId)) {
                     const currentValue = payload.New_SLA_Value__c;
-
-                    // Avoid duplicate toasts for the same value
+                    // Show toast only if SLA value changed
                     if (currentValue !== this.previousValue) {
-                        // Show a toast notification to the user
                         this.showToast(
                             'SLA Changed',
                             'You have changed the SLA value. Please verify this update carefully.',
                             'warning'
                         );
-
-                        // Update previous value to prevent repeated notifications
-                        this.previousValue = currentValue;
+                        this.previousValue = currentValue; // Update tracked value
                     }
                 }
             }
         };
 
-        // Subscribe to the event channel using EMP API
+        // Subscribe to the Platform Event channel
         subscribe(this.channelName, -1, messageCallback)
             .then(response => {
-                this.subscription = response;
+                this.subscription = response; // Store subscription response
             })
             .catch(error => {
                 console.error('Subscription error:', JSON.stringify(error));
             });
     }
 
-    // Gracefully unsubscribe when the component is destroyed
+    // Unsubscribes from the Platform Event channel
     handleUnsubscribe() {
         if (this.subscription && this.subscription.id) {
             unsubscribe(this.subscription, () => {});
         }
     }
 
-    // Registers a listener to catch any EMP API errors
+    // Listens for EMP API errors (e.g., connection issues)
     registerErrorListener() {
         onError(error => {
             console.error('Platform Event Error:', JSON.stringify(error));
         });
     }
 
-    // Helper method to display a toast message
+    // Helper method to show toast notifications
     showToast(title, message, variant) {
         this.dispatchEvent(new ShowToastEvent({
             title,
